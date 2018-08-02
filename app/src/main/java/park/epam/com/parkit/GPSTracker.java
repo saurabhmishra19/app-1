@@ -12,6 +12,24 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+
+import com.google.maps.DirectionsApi;
+import com.google.maps.DistanceMatrixApi;
+import com.google.maps.DistanceMatrixApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.DistanceMatrix;
+import com.google.maps.model.Duration;
+import com.google.maps.model.LatLng;
+import com.google.maps.model.TravelMode;
+
+import org.joda.time.DateTime;
+
+import java.io.IOException;
+
 /**
  * Created by saurabh on 3/8/18.
  */
@@ -106,27 +124,27 @@ public class GPSTracker extends Service implements LocationListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        System.out.println("distance  "+getDurationForRoute(location,"",""));
         return location;
     }
 
     /**
      * Stop using GPS listener
      * Calling this function will stop using GPS in your app
-     * */
+     */
 
-    public void stopUsingGPS(){
-        if(locationManager != null){
+    public void stopUsingGPS() {
+        if (locationManager != null) {
             locationManager.removeUpdates(GPSTracker.this);
         }
     }
 
     /**
      * Function to get latitude
-     * */
+     */
 
-    public double getLatitude(){
-        if(location != null){
+    public double getLatitude() {
+        if (location != null) {
             latitude = location.getLatitude();
         }
 
@@ -136,10 +154,10 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Function to get longitude
-     * */
+     */
 
-    public double getLongitude(){
-        if(location != null){
+    public double getLongitude() {
+        if (location != null) {
             longitude = location.getLongitude();
         }
 
@@ -149,8 +167,9 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Function to check GPS/wifi enabled
+     *
      * @return boolean
-     * */
+     */
 
     public boolean canGetLocation() {
         return this.canGetLocation;
@@ -159,9 +178,9 @@ public class GPSTracker extends Service implements LocationListener {
     /**
      * Function to show settings alert dialog
      * On pressing Settings button will lauch Settings Options
-     * */
+     */
 
-    public void showSettingsAlert(){
+    public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
         // Setting Dialog Title
@@ -172,7 +191,7 @@ public class GPSTracker extends Service implements LocationListener {
 
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+            public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
             }
@@ -188,6 +207,49 @@ public class GPSTracker extends Service implements LocationListener {
         // Showing Alert Message
         alertDialog.show();
     }
+
+
+    public String getDurationForRoute(Location loc,String origin, String destination) {
+        // - We need a context to access the API
+        GeoApiContext geoApiContext = new GeoApiContext.Builder()
+                .apiKey("AIzaSyCI_cwl9TyhK4HkAwIzkr-HIX7NXhO9JVQ")
+                .build();
+
+
+
+        DateTime now = new DateTime();
+
+        // - Perform the actual request
+        DirectionsResult directionsResult = null;
+         try {
+
+             LatLng originAdd = new LatLng(loc.getLatitude(), loc.getLongitude());
+             LatLng destinationAdd = new LatLng(17.4782308,78.3396784);
+
+
+
+             DistanceMatrixApiRequest req = DistanceMatrixApi.newRequest(geoApiContext);
+            DistanceMatrix trix = req.origins(originAdd)
+                    .destinations(destinationAdd)
+                    .mode(TravelMode.DRIVING)
+                    .avoid(DirectionsApi.RouteRestriction.HIGHWAYS)
+                    .language("en-IN")
+                    .await();
+             long distApart = trix.rows[0].elements[0].distance.inMeters;
+
+             return distApart+"";
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        // - Parse the result
+       /* DirectionsRoute route = directionsResult.routes[0];
+        DirectionsLeg leg = route.legs[0];
+        Duration duration = leg.duration;
+        return duration.humanReadable;*/
+       return null;
+    }
+
 
     @Override
     public void onLocationChanged(Location location) {

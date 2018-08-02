@@ -1,5 +1,6 @@
 package park.epam.com.parkit;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -39,6 +40,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         btnShowLocation = (Button) findViewById(R.id.button);
+
+        Button mEmailSignInButton = (Button) findViewById(R.id.open_map_button);
+        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+           /*EditText editText = (EditText) findViewById(R.id.editText);
+            String message = editText.getText().toString();
+            intent.putExtra("", message);*/
+                startActivity(intent);
+            }
+        });
+
 
         // show location button click event
         btnShowLocation.setOnClickListener(new View.OnClickListener() {
