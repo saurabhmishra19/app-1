@@ -1,6 +1,10 @@
 package park.epam.com.parkit;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -16,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     Button btnShowLocation;
+    Button b1;
     private static final int REQUEST_CODE_PERMISSION = 2;
     String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -62,17 +67,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View arg0) {
                 // create class object
                 gps = new GPSTracker(MainActivity.this);
-
                 // check if GPS enabled
                 if(gps.canGetLocation()){
 
                     double latitude = gps.getLatitude();
                     double longitude = gps.getLongitude();
-
                     // \n is for new line
-                    Toast.makeText(getApplicationContext(), "Your Location is - \nLat: "
-                            + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-                
+                    Toast.makeText(getApplicationContext(), gps.distanceAll, Toast.LENGTH_LONG).show();
+                    addNotification( gps.distanceAll);
                 }else{
                     // can't get location
                     // GPS or Network is not enabled
@@ -82,5 +84,39 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        b1 = (Button)findViewById(R.id.button_notification);
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    addNotification("");
+                Toast.makeText(getApplicationContext(), "hiiii", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+
     }
+
+    private void addNotification(String message) {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                       // .setSmallIcon(R.layout.)
+                        .setContentTitle("Notifications Example")
+                        .setContentText("This is a test notification");
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+
+        // Add as notification
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
+    }
+
+
+
+
 }

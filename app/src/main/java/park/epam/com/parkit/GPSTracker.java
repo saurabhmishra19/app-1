@@ -51,6 +51,8 @@ public class GPSTracker extends Service implements LocationListener {
     double latitude; // latitude
     double longitude; // longitude
 
+    String distanceAll;
+
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
 
@@ -124,7 +126,9 @@ public class GPSTracker extends Service implements LocationListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("distance  "+getDurationForRoute(location,"",""));
+
+        distanceAll="Distance: "+getDurationForRoute(location,"","")+"\nLat:"+location.getLatitude()+"\nLong:"+location.getLongitude();
+
         return location;
     }
 
@@ -212,7 +216,7 @@ public class GPSTracker extends Service implements LocationListener {
     public String getDurationForRoute(Location loc,String origin, String destination) {
         // - We need a context to access the API
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
-                .apiKey(")
+                .apiKey("")
                 .build();
 
 
@@ -224,7 +228,7 @@ public class GPSTracker extends Service implements LocationListener {
          try {
 
              LatLng originAdd = new LatLng(loc.getLatitude(), loc.getLongitude());
-             LatLng destinationAdd = new LatLng(17.4782308,78.3396784);
+             LatLng destinationAdd = new LatLng(17.5141924,78.3721562);
 
 
 
@@ -235,9 +239,9 @@ public class GPSTracker extends Service implements LocationListener {
                     .avoid(DirectionsApi.RouteRestriction.HIGHWAYS)
                     .language("en-IN")
                     .await();
-             long distApart = trix.rows[0].elements[0].distance.inMeters;
+             String distApart = "Time to Reach: "+trix.rows[0].elements[0].durationInTraffic+"\nDistance: "+trix.rows[0].elements[0].distance+"\n All Data"+trix.rows[0].elements[0];
 
-             return distApart+"";
+             return distApart;
         } catch(Exception e){
             System.out.println(e.getMessage());
         }

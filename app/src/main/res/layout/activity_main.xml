@@ -15,4 +15,19 @@
         android:layout_width = "fill_parent"
         android:layout_height = "wrap_content"
         android:text = "Map"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notification"
+        android:id="@+id/button_notification"
+        android:layout_marginTop="62dp"
+        android:layout_below="@+id/imageButton"
+        android:layout_centerHorizontal="true" />
 </LinearLayout>
