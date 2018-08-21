@@ -216,7 +216,7 @@ public class GPSTracker extends Service implements LocationListener {
     public String getDurationForRoute(Location loc,String origin, String destination) {
         // - We need a context to access the API
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
-                .apiKey("")
+                .apiKey("AIzaSyBsAhXRBCTOu_lY7r8Z4NQ7RwW2HYAU4LA ")
                 .build();
 
 
@@ -235,7 +235,7 @@ public class GPSTracker extends Service implements LocationListener {
              DistanceMatrixApiRequest req = DistanceMatrixApi.newRequest(geoApiContext);
             DistanceMatrix trix = req.origins(originAdd)
                     .destinations(destinationAdd)
-                    .mode(TravelMode.DRIVING)
+                    .mode(TravelMode.DRIVING).departureTime(new DateTime())
                     .avoid(DirectionsApi.RouteRestriction.HIGHWAYS)
                     .language("en-IN")
                     .await();

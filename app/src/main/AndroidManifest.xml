@@ -33,15 +33,29 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-
-        <activity android:name=".NotificationView"
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".NotificationView"
             android:label="Details of notification"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".MainActivity" />
         </activity>
+
+        <service
+            android:name=".BasicService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <provider
+            android:name=".park.epam.com.dao.EmplyeeProvider"
+            android:authorities="park.epam.com.parkit.park.epam.com.dao.EmplyeeProvider" />
+
+        <activity
+            android:name=".RegistraionActivity"
+            android:label="@string/title_activity_registraion"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
