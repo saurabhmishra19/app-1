@@ -216,7 +216,7 @@ public class GPSTracker extends Service implements LocationListener {
     public String getDurationForRoute(Location loc,String origin, String destination) {
         // - We need a context to access the API
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
-                .apiKey("AIzaSyBsAhXRBCTOu_lY7r8Z4NQ7RwW2HYAU4LA ")
+                .apiKey("")
                 .build();
 
 
